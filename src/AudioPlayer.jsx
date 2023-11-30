@@ -10,6 +10,7 @@ const AudioPlayer = ({ tracks }) => {
   const [trackProgress, setTrackProgress] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [time, setTime] = useState([])
+  const [timearr,setTimearr]= useState({})
 
   // Destructure for conciseness
   const { title, artist, color, image, audioSrc } = tracks[trackIndex];
@@ -91,35 +92,75 @@ const AudioPlayer = ({ tracks }) => {
     //   console.log(arr[id]);
     //  });
     let arr=time.slice(1)
+    let temp={}
     for (let i = 0; i < arr.length - 1; i++) { //ending loop before last element
         if (arr[i].type==='start') {
           if(arr[i+1].type==='end'){
             let duration = (arr[i+1].timestamp - arr[i].timestamp)/1000;
             console.log(duration,':',arr[i].title);
+            if(temp[arr[i].title])
+                  {
+                      temp[arr[i].title] += duration
+                      
+                  }
+                  else{
+                      temp[arr[i].title] = duration
+                      
+                  }
           }
         }
         if (arr[i].type==='start') {
           if(arr[i+1].type==='change'){
             let duration = (arr[i+1].timestamp - arr[i].timestamp)/1000;
             console.log(duration,':',arr[i].title);
+            if(temp[arr[i].title])
+                  {
+                      temp[arr[i].title] += duration
+                      
+                  }
+                  else{
+                      temp[arr[i].title] = duration
+                      
+                  }
           }
         }
         if (arr[i].type==='change') {
           if(arr[i+1].type==='end'){
             let duration = (arr[i+1].timestamp - arr[i].timestamp)/1000;
             console.log(duration,':',arr[i].title);
+            if(temp[arr[i].title])
+                  {
+                      temp[arr[i].title] += duration
+                      
+                  }
+                  else{
+                      temp[arr[i].title] = duration
+                      
+                  }
           }
         }
         if (arr[i].type==='change') {
           if(arr[i+1].type==='change'){
             let duration = (arr[i+1].timestamp - arr[i].timestamp)/1000;
             console.log(duration,':',arr[i].title);
+            if(temp[arr[i].title])
+                  {
+                      temp[arr[i].title] += duration
+                      
+                  }
+                  else{
+                      temp[arr[i].title] = duration
+                      
+                  }
           }
         }
+        setTimearr(temp)
   }
   }
 
-
+const handleExit=()=>{
+  console.log(timearr);
+}
 
 
 
@@ -197,6 +238,7 @@ const AudioPlayer = ({ tracks }) => {
         <h2 className="title">{title}</h2>
         <h3 className="artist">{artist}</h3>
         <button type="button" onClick={Stop}>stop</button>
+        <button type="button" onClick={handleExit}>exit</button>
         <AudioControls
           isPlaying={isPlaying}
           onPrevClick={toPrevTrack}
